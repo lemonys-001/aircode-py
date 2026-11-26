@@ -4,9 +4,61 @@ Aircode is a Python 3.11+ application. The native GUI additionally needs
 PySide6, which is a large optional dependency. The TUI and web UI work without
 it.
 
-There is no PyPI release yet. Install from this repository.
+## Install a release binary
 
-## Quick start
+GitHub Actions builds these on every `v*` tag:
+
+- Linux x86_64 and aarch64
+- macOS x86_64 and arm64
+- Windows x86_64
+
+From anywhere, run the installer straight from GitHub:
+
+```bash
+gh api repos/lemonys-001/aircode-py/contents/install.sh \
+  -H "Accept: application/vnd.github.raw" | sh
+```
+
+Or from a checkout:
+
+```bash
+sh install.sh
+```
+
+On Windows:
+
+```powershell
+.\install.ps1
+```
+
+The script downloads the asset for this machine, verifies `SHA256SUMS` when it
+is present, and installs to `~/.local/bin/aircode` (Windows:
+`%LOCALAPPDATA%\Aircode\bin\aircode.exe`). Use `--prefix DIR` to change that.
+The Linux aarch64 build is made under QEMU in CI, so it is slower to produce.
+The Linux binaries target Ubuntu 22.04 (x86_64) and 24.04 (aarch64); use
+`--source` on older systems.
+
+This repository is private, so use `gh auth login` first or set `GITHUB_TOKEN`.
+The installer tries `gh release download` before `curl`/`wget`. A public fork
+can use the plain URL:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/lemonys-001/aircode-py/main/install.sh | sh
+```
+
+Until a release tag exists, install from source:
+
+```bash
+sh install.sh --source --gui
+```
+
+`--source` uses this checkout when it finds `pyproject.toml`, otherwise the
+repository URL. Drop `--gui` for the TUI and web UI only.
+
+The macOS binaries are unsigned. The installer clears the quarantine flag, but
+Gatekeeper may still ask you to allow the app in System Settings.
+
+## Quick start from source
 
 ```bash
 git clone https://github.com/lemonys-001/aircode-py.git
@@ -25,6 +77,17 @@ aircode
 
 `aircode doctor` reports Python, GIL, CPU workers, the database, credentials,
 the web build and whether PySide6 and a display are available.
+
+## Publish a release
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The workflow `.github/workflows/release.yml` builds the assets and publishes the
+GitHub release. It can also be run manually from the Actions tab; that run only
+uploads workflow artifacts, not a release.
 
 ## Without the native GUI
 

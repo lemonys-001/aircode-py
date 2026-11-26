@@ -19,15 +19,45 @@ Working today:
 - Three interfaces: Textual TUI, PySide6 native window, Svelte web app
 - Mode picker when you run `aircode` with no arguments
 - Process-pool helper and a `doctor` report for GIL / CPU use
+- CI-built release binaries and `install.sh` / `install.ps1` installers
 
 Planned for full parity: LSP, MCP, skills, custom agents and commands,
-subagents, plugins, ACP, GitHub integration, share links, themes and packaging.
+subagents, plugins, ACP, GitHub integration, share links and themes.
 See [Roadmap](#roadmap).
 
 ## Install
 
 See [INSTALL.md](INSTALL.md) for the full guide, platform notes and troubleshooting.
 Requires Python 3.11 or newer; 3.13 is recommended.
+
+Install a prebuilt release binary from anywhere:
+
+```bash
+gh api repos/lemonys-001/aircode-py/contents/install.sh \
+  -H "Accept: application/vnd.github.raw" | sh
+```
+
+Or from a checkout:
+
+```bash
+sh install.sh
+```
+
+Windows:
+
+```powershell
+.\install.ps1
+```
+
+The scripts download the CI-built binary for your platform. This repository is
+private, so run `gh auth login` first or set `GITHUB_TOKEN`. Until a release is
+tagged, use the source fallback:
+
+```bash
+sh install.sh --source --gui
+```
+
+From source manually:
 
 ```bash
 git clone https://github.com/lemonys-001/aircode-py.git
