@@ -138,8 +138,16 @@ fi
 
 if [ "$downloaded" = 0 ]; then
     say "No prebuilt binary found for $OS-$ARCH ($VERSION)."
-    say "Install from source with: $0 --source --gui"
-    exit 1
+    say "Installing from source instead."
+    if [ "$GUI" = 0 ] && { [ "$OS" = macos ] || [ -n "${DISPLAY:-}" ] || [ -n "${WAYLAND_DISPLAY:-}" ]; }; then
+        GUI=1
+    fi
+    install_source
+    case ":$PATH:" in
+        *":$BIN_DIR:"*) ;;
+        *) say "Add $BIN_DIR to PATH to run aircode from any directory." ;;
+    esac
+    exit 0
 fi
 
 if [ -s "$tmp/SHA256SUMS" ]; then

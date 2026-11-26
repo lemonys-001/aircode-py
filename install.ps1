@@ -53,9 +53,11 @@ if ($Source) {
 
 $arch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture
 if ($arch -ne "X64") {
-    Write-Host "No prebuilt binary for Windows $arch."
-    Write-Host "Install from source with: .\install.ps1 -Source -Gui"
-    exit 1
+    Write-Host "No prebuilt binary for Windows $arch. Installing from source."
+    $Gui = $true
+    Install-Source
+    Write-Host "Add $BinDir to PATH if it is not already there."
+    exit 0
 }
 
 $asset = "aircode-windows-x86_64.exe"
@@ -91,8 +93,11 @@ if (-not $downloaded) {
     } catch {
         Write-Host "No prebuilt binary found for Windows x86_64 ($Version)."
         Write-Host "For a private repository, run: gh auth login"
-        Write-Host "Or install from source with: .\install.ps1 -Source -Gui"
-        exit 1
+        Write-Host "Installing from source instead."
+        $Gui = $true
+        Install-Source
+        Write-Host "Add $BinDir to PATH if it is not already there."
+        exit 0
     }
 }
 

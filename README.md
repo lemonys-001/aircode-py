@@ -50,12 +50,15 @@ Windows:
 ```
 
 The scripts download the CI-built binary for your platform. This repository is
-private, so run `gh auth login` first or set `GITHUB_TOKEN`. Until a release is
-tagged, use the source fallback:
+private, so run `gh auth login` first or set `GITHUB_TOKEN`. If no binary is
+available, the same command falls back to a source install:
 
 ```bash
-sh install.sh --source --gui
+sh install.sh
 ```
+
+Force the source path with `sh install.sh --source --gui`; drop `--gui` for the
+TUI and web UI only.
 
 From source manually:
 

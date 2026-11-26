@@ -46,7 +46,9 @@ can use the plain URL:
 curl -fsSL https://raw.githubusercontent.com/lemonys-001/aircode-py/main/install.sh | sh
 ```
 
-Until a release tag exists, install from source:
+If no release binary is available, the same command installs from source
+automatically. On a desktop it includes the native window; on a headless Linux
+machine it installs the TUI and web UI only. Force a source install with:
 
 ```bash
 sh install.sh --source --gui
