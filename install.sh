@@ -89,13 +89,29 @@ fi
 case "$(uname -s)" in
     Linux) OS=linux ;;
     Darwin) OS=macos ;;
-    *) fail "unsupported operating system: $(uname -s)" ;;
+    *)
+        say "No prebuilt binary for $(uname -s). Installing from source."
+        install_source
+        case ":$PATH:" in
+            *":$BIN_DIR:"*) ;;
+            *) say "Add $BIN_DIR to PATH to run aircode from any directory." ;;
+        esac
+        exit 0
+        ;;
 esac
 
 case "$(uname -m)" in
     x86_64|amd64) ARCH=x86_64 ;;
     arm64|aarch64) ARCH=aarch64 ;;
-    *) fail "unsupported architecture: $(uname -m)" ;;
+    *)
+        say "No prebuilt binary for $OS-$(uname -m). Installing from source."
+        install_source
+        case ":$PATH:" in
+            *":$BIN_DIR:"*) ;;
+            *) say "Add $BIN_DIR to PATH to run aircode from any directory." ;;
+        esac
+        exit 0
+        ;;
 esac
 if [ "$OS" = macos ] && [ "$ARCH" = aarch64 ]; then
     ARCH=arm64

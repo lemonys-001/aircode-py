@@ -55,7 +55,8 @@ sh install.sh --source --gui
 ```
 
 `--source` uses this checkout when it finds `pyproject.toml`, otherwise the
-repository URL. Drop `--gui` for the TUI and web UI only.
+repository URL. It works on any platform with Python 3.11+ and pip or uv. Drop
+`--gui` for the TUI and web UI only.
 
 The macOS binaries are unsigned. The installer clears the quarantine flag, but
 Gatekeeper may still ask you to allow the app in System Settings.

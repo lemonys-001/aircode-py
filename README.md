@@ -58,7 +58,7 @@ sh install.sh
 ```
 
 Force the source path with `sh install.sh --source --gui`; drop `--gui` for the
-TUI and web UI only.
+TUI and web UI only. Source install works on any platform with Python 3.11+.
 
 From source manually:
 
