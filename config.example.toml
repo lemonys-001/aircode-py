@@ -1,0 +1,25 @@
+# Aircode configuration. Copy to:
+#   Linux:   ~/.config/aircode/config.toml
+#   macOS:   ~/Library/Application Support/Aircode/config.toml
+#   Windows: %APPDATA%\Aircode\config.toml
+#
+# A project can override these in <project>/.aircode/config.toml
+
+[general]
+model = "opencode/deepseek-v4.1-flash-free"
+max_steps = 40
+max_history_chars = 240000
+
+[permissions]
+# ask | allow | deny
+write = "ask"
+edit = "ask"
+bash = "ask"
+webfetch = "ask"
+
+[tools]
+bash_timeout = 120
+
+[server]
+host = "127.0.0.1"
+port = 4097
