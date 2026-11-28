@@ -90,6 +90,9 @@ if [ "$YES" = 0 ]; then
     fi
 fi
 
+if command -v uv >/dev/null 2>&1 && [ -d "$UV_TOOL" ]; then
+    uv tool uninstall aircode-py >/dev/null 2>&1 || true
+fi
 printf '%s\n' "$targets" | while IFS= read -r path; do
     [ -n "$path" ] || continue
     rm -rf -- "$path"
