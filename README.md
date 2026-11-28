@@ -17,7 +17,7 @@ Working today:
 - Tools: read, write, edit, bash, glob, grep, list
 - Permission prompts for writes, edits and shell commands
 - Three interfaces: Textual TUI, PySide6 native window, Svelte web app
-- Mode picker when you run `aircode` with no arguments
+- Mode picker when you run `aircode-py` with no arguments
 - Process-pool helper and a `doctor` report for GIL / CPU use
 - CI-built release binaries and `install.sh` / `install.ps1` installers
 
@@ -33,32 +33,26 @@ Requires Python 3.11 or newer; 3.13 is recommended.
 Install a prebuilt release binary from anywhere:
 
 ```bash
-gh api repos/lemonys-001/aircode-py/contents/install.sh \
-  -H "Accept: application/vnd.github.raw" | sh
+curl -fsSL https://raw.githubusercontent.com/lemonys-001/aircode-py/main/install.sh | sh
 ```
 
-Or from a checkout:
-
-```bash
-sh install.sh
-```
-
-Windows:
+Windows PowerShell:
 
 ```powershell
-.\install.ps1
+irm https://raw.githubusercontent.com/lemonys-001/aircode-py/main/install.ps1 | iex
 ```
 
-The scripts download the CI-built binary for your platform. This repository is
-private, so run `gh auth login` first or set `GITHUB_TOKEN`. If no binary is
-available, the same command falls back to a source install:
+The installer downloads the CI-built binary for your platform, verifies its
+SHA-256 checksum, installs `aircode-py`, and adds it to PATH. If no binary is
+available, it falls back to a source install. Force the source path with
+`sh install.sh --source --gui`; drop `--gui` for the TUI and web UI only.
+Source install works on any platform with Python 3.11+.
+
+Or run it from a checkout:
 
 ```bash
 sh install.sh
 ```
-
-Force the source path with `sh install.sh --source --gui`; drop `--gui` for the
-TUI and web UI only. Source install works on any platform with Python 3.11+.
 
 From source manually:
 
@@ -83,7 +77,7 @@ the TUI and the web interface only.
 ## Log in
 
 ```bash
-aircode auth login
+aircode-py auth login
 ```
 
 A code and a URL are printed. Approve in the browser, pick a workspace if you
@@ -101,15 +95,15 @@ rest of the app.
 ## Run
 
 ```bash
-aircode            # mode picker: native desktop, terminal, web, headless
-aircode gui        # native PySide6 window
-aircode tui        # terminal interface
-aircode web        # local web server + browser UI
-aircode run "explain this repo"
-aircode chat       # headless REPL
+aircode-py            # mode picker: native desktop, terminal, web, headless
+aircode-py gui        # native PySide6 window
+aircode-py tui        # terminal interface
+aircode-py web        # local web server + browser UI
+aircode-py run "explain this repo"
+aircode-py chat       # headless REPL
 ```
 
-`aircode` with no arguments defaults to the native window when a display and
+`aircode-py` with no arguments defaults to the native window when a display and
 PySide6 are available, otherwise the TUI. The web server binds `127.0.0.1` by
 default. If you bind a public address without a token, Aircode generates one and
 prints it.
@@ -117,8 +111,8 @@ prints it.
 ### Model
 
 ```bash
-aircode models
-aircode run -m deepseek-v4.1-flash-free "fix the failing test"
+aircode-py models
+aircode-py run -m deepseek-v4.1-flash-free "fix the failing test"
 ```
 
 The default is `opencode/deepseek-v4.1-flash-free`. The model list comes from
@@ -127,9 +121,9 @@ The default is `opencode/deepseek-v4.1-flash-free`. The model list comes from
 ### Sessions
 
 ```bash
-aircode sessions list
-aircode sessions show <id>
-aircode sessions export <id> --out session.json
+aircode-py sessions list
+aircode-py sessions show <id>
+aircode-py sessions export <id> --out session.json
 ```
 
 Sessions are stored in SQLite in the app data directory.
@@ -168,9 +162,9 @@ installation. Aircode therefore does three things:
 1. All network, streaming and subprocess work is async, so many sessions and
    tools make progress without waiting.
 2. CPU-heavy work runs through `ProcessPoolExecutor` with one worker per core
-   (`aircode/parallel.py`). `aircode doctor --bench` measures the speedup.
+   (`aircode/parallel.py`). `aircode-py doctor --bench` measures the speedup.
 3. If you run on a free-threaded build (3.14t, `PYTHON_GIL=0`), the same code
-   uses threads without the GIL; `aircode doctor` reports which build you are on.
+   uses threads without the GIL; `aircode-py doctor` reports which build you are on.
 
 There is no global engine lock: sessions are independent async tasks and SQLite
 uses WAL with short transactions.

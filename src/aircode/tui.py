@@ -225,7 +225,7 @@ class AircodeApp(App):
         self.query_one("#prompt", Input).focus()
         self.run_worker(self._load_history(), group="load", exclusive=True)
         if not ZenAuth().logged_in():
-            self._notice("Not logged in. Run: aircode auth login")
+            self._notice("Not logged in. Run: aircode-py auth login")
 
     def _short_model(self) -> str:
         return self.model.split("/", 1)[-1]

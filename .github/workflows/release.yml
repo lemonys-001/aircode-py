@@ -18,13 +18,13 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04
-            asset: aircode-linux-x86_64
+            asset: aircode-py-linux-x86_64
           - os: macos-15-intel
-            asset: aircode-macos-x86_64
+            asset: aircode-py-macos-x86_64
           - os: macos-15
-            asset: aircode-macos-arm64
+            asset: aircode-py-macos-arm64
           - os: windows-2022
-            asset: aircode-windows-x86_64.exe
+            asset: aircode-py-windows-x86_64.exe
 
     steps:
       - uses: actions/checkout@v4
@@ -47,9 +47,10 @@ jobs:
         shell: bash
         run: |
           if [ "$RUNNER_OS" = "Windows" ]; then
-            cp dist/aircode.exe "${{ matrix.asset }}"
+            cp dist/aircode-py.exe "${{ matrix.asset }}"
           else
-            cp dist/aircode "${{ matrix.asset }}"
+            cp dist/aircode-py "${{ matrix.asset }}"
+            chmod +x "${{ matrix.asset }}"
           fi
 
       - uses: actions/upload-artifact@v4
@@ -59,7 +60,7 @@ jobs:
           if-no-files-found: error
 
   build-linux-arm64:
-    name: aircode-linux-aarch64
+    name: aircode-py-linux-aarch64
     runs-on: ubuntu-22.04
     continue-on-error: true
     timeout-minutes: 90
@@ -88,14 +89,15 @@ jobs:
               /venv/bin/pip install --no-cache-dir ".[gui]" pyinstaller
               /venv/bin/python -m PyInstaller --clean --noconfirm \
                 --distpath /tmp/dist --workpath /tmp/build packaging/aircode.spec
-              cp /tmp/dist/aircode /out/aircode-linux-aarch64
+              cp /tmp/dist/aircode-py /out/aircode-py-linux-aarch64
+              chmod +x /out/aircode-py-linux-aarch64
             '
-          cp "$RUNNER_TEMP/aircode-out/aircode-linux-aarch64" .
+          cp "$RUNNER_TEMP/aircode-out/aircode-py-linux-aarch64" .
 
       - uses: actions/upload-artifact@v4
         with:
-          name: aircode-linux-aarch64
-          path: aircode-linux-aarch64
+          name: aircode-py-linux-aarch64
+          path: aircode-py-linux-aarch64
           if-no-files-found: error
 
   release:

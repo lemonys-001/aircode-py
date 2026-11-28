@@ -27,7 +27,7 @@ def choose_mode() -> str | None:
     if not sys.stdin.isatty():
         if gui_available:
             return "gui"
-        print("No terminal and no display. Try: aircode --help", file=sys.stderr)
+        print("No terminal and no display. Try: aircode-py --help", file=sys.stderr)
         return None
 
     options = [
@@ -91,7 +91,7 @@ def run_mode(mode: str, config) -> int:
         from .auth import ZenAuth
 
         if not ZenAuth().logged_in():
-            print("Not logged in. Run: aircode auth login", file=sys.stderr)
+            print("Not logged in. Run: aircode-py auth login", file=sys.stderr)
             return 2
         import asyncio
 

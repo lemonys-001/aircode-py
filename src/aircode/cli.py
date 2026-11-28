@@ -29,10 +29,10 @@ from .store import Store
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="aircode",
+        prog="aircode-py",
         description="Aircode: a Python coding agent for the terminal, desktop and web.",
     )
-    parser.add_argument("--version", action="version", version=f"aircode {__version__}")
+    parser.add_argument("--version", action="version", version=f"aircode-py {__version__}")
     sub = parser.add_subparsers(dest="command")
 
     auth = sub.add_parser("auth", help="manage the OpenCode Zen login")
@@ -106,7 +106,7 @@ def _config(args) -> Config:
 def _require_login() -> ZenAuth:
     auth = ZenAuth()
     if not auth.logged_in():
-        print("Not logged in. Run: aircode auth login", file=sys.stderr)
+        print("Not logged in. Run: aircode-py auth login", file=sys.stderr)
         raise SystemExit(2)
     return auth
 
@@ -115,7 +115,7 @@ def _print_auth_status() -> None:
     store = CredentialStore()
     status = store.status()
     if not status:
-        print("No credentials. Run: aircode auth login")
+        print("No credentials. Run: aircode-py auth login")
         return
     for provider, value in sorted(status.items()):
         expires = int(value.get("expires") or 0)
@@ -340,7 +340,7 @@ async def _chat(config: Config, auth: ZenAuth, session: str | None) -> int:
 
 
 def _doctor(args) -> int:
-    print(f"aircode {__version__}")
+    print(f"aircode-py {__version__}")
     print(f"python {sys.version.split()[0]}")
     print(f"GIL enabled: {gil_enabled()}")
     print(f"CPU workers: {cpu_workers()}")

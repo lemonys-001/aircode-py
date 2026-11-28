@@ -38,7 +38,7 @@ dev = [
 ]
 
 [project.scripts]
-aircode = "aircode.cli:main"
+aircode-py = "aircode.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/lemonys-001/aircode-py"

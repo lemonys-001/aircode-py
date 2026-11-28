@@ -270,7 +270,7 @@ if HAVE_QT:
             if not ZenAuth().logged_in():
                 self._block(
                     "Aircode",
-                    "Not logged in. Run `aircode auth login` in a terminal, then reopen.",
+                    "Not logged in. Run `aircode-py auth login` in a terminal, then reopen.",
                     "#fbbf24",
                 )
 
@@ -488,7 +488,7 @@ def run_gui(
     from .launcher import has_display
 
     if not has_display():
-        raise SystemExit("No display detected. Use `aircode tui` or `aircode web`.")
+        raise SystemExit("No display detected. Use `aircode-py tui` or `aircode-py web`.")
     app = QApplication.instance() or QApplication(sys.argv)
     app.setApplicationName("Aircode")
     app.setStyle("Fusion")

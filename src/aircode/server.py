@@ -131,7 +131,7 @@ def create_app(
         if not text:
             raise HTTPException(400, "text is required")
         if not app.state.auth.logged_in():
-            raise HTTPException(401, "Not logged in. Run: aircode auth login")
+            raise HTTPException(401, "Not logged in. Run: aircode-py auth login")
         session_id = body.get("session_id") or None
         model = body.get("model") or None
         queue: asyncio.Queue = asyncio.Queue()

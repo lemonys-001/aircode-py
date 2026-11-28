@@ -278,14 +278,14 @@ class ZenAuth:
     async def access(self) -> Credential:
         data = self.store.get(PROVIDER)
         if not data:
-            raise AuthError("Not logged in. Run: aircode auth login")
+            raise AuthError("Not logged in. Run: aircode-py auth login")
         credential = Credential.from_dict(data)
         if not credential.access:
-            raise AuthError("The stored credential is incomplete. Run: aircode auth login")
+            raise AuthError("The stored credential is incomplete. Run: aircode-py auth login")
         now = int(time.time() * 1000)
         if credential.expires and credential.expires <= now + 60_000:
             if not credential.refresh:
-                raise AuthError("The session expired. Run: aircode auth login")
+                raise AuthError("The session expired. Run: aircode-py auth login")
             credential = await self.refresh(credential)
         return credential
 

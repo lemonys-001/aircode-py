@@ -15,8 +15,13 @@ GitHub Actions builds these on every `v*` tag:
 From anywhere, run the installer straight from GitHub:
 
 ```bash
-gh api repos/lemonys-001/aircode-py/contents/install.sh \
-  -H "Accept: application/vnd.github.raw" | sh
+curl -fsSL https://raw.githubusercontent.com/lemonys-001/aircode-py/main/install.sh | sh
+```
+
+On Windows PowerShell:
+
+```powershell
+irm https://raw.githubusercontent.com/lemonys-001/aircode-py/main/install.ps1 | iex
 ```
 
 Or from a checkout:
@@ -25,26 +30,17 @@ Or from a checkout:
 sh install.sh
 ```
 
-On Windows:
-
 ```powershell
 .\install.ps1
 ```
 
-The script downloads the asset for this machine, verifies `SHA256SUMS` when it
-is present, and installs to `~/.local/bin/aircode` (Windows:
-`%LOCALAPPDATA%\Aircode\bin\aircode.exe`). Use `--prefix DIR` to change that.
-The Linux aarch64 build is made under QEMU in CI, so it is slower to produce.
-The Linux binaries target Ubuntu 22.04 (x86_64) and 24.04 (aarch64); use
-`--source` on older systems.
-
-This repository is private, so use `gh auth login` first or set `GITHUB_TOKEN`.
-The installer tries `gh release download` before `curl`/`wget`. A public fork
-can use the plain URL:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/lemonys-001/aircode-py/main/install.sh | sh
-```
+The script downloads the asset for this machine, requires and verifies
+`SHA256SUMS`, and installs to `~/.local/bin/aircode-py` (Windows:
+`%LOCALAPPDATA%\aircode-py\bin\aircode-py.exe`). It adds that folder to PATH;
+pass `--no-modify-path` to skip that. Use `--prefix DIR` to change the install
+root. The Linux aarch64 build is made under QEMU in CI, so it is slower to
+produce. The Linux binaries target Ubuntu 22.04 (x86_64) and 24.04 (aarch64);
+use `--source` on older systems.
 
 If no release binary is available, the same command installs from source
 automatically. On a desktop it includes the native window; on a headless Linux
@@ -72,13 +68,13 @@ source .venv/bin/activate          # Windows: .venv\Scripts\activate
 python -m pip install --upgrade pip
 python -m pip install -e ".[gui]"
 
-aircode --version
-aircode doctor
-aircode auth login
-aircode
+aircode-py --version
+aircode-py doctor
+aircode-py auth login
+aircode-py
 ```
 
-`aircode doctor` reports Python, GIL, CPU workers, the database, credentials,
+`aircode-py doctor` reports Python, GIL, CPU workers, the database, credentials,
 the web build and whether PySide6 and a display are available.
 
 ## Publish a release
@@ -98,7 +94,7 @@ uploads workflow artifacts, not a release.
 python -m pip install -e .
 ```
 
-Then `aircode` offers the terminal and web interfaces. `aircode gui` will not
+Then `aircode-py` offers the terminal and web interfaces. `aircode-py gui` will not
 work until PySide6 is installed:
 
 ```bash
@@ -111,7 +107,7 @@ python -m pip install "PySide6>=6.8"
 uv venv --python 3.13
 uv pip install -e ".[gui]"
 . .venv/bin/activate
-aircode doctor
+aircode-py doctor
 ```
 
 ## Windows
@@ -123,7 +119,7 @@ py -3.13 -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -e ".[gui]"
-aircode doctor
+aircode-py doctor
 ```
 
 If PowerShell blocks the activation script for the current process:
@@ -142,7 +138,7 @@ source .venv/bin/activate
 python -m pip install -e ".[gui]"
 ```
 
-If the Qt window does not open, run `aircode doctor` and check that PySide6 is
+If the Qt window does not open, run `aircode-py doctor` and check that PySide6 is
 installed. Reinstalling it usually fixes a missing platform plugin:
 
 ```bash
@@ -174,16 +170,16 @@ The wheel already contains the built web UI. For the native window, also install
 ## Log in
 
 ```bash
-aircode auth login
+aircode-py auth login
 ```
 
 Approve the printed code in a browser, then choose a workspace if you have more
-than one. Use `aircode auth login --no-browser` to only print the URL and code.
+than one. Use `aircode-py auth login --no-browser` to only print the URL and code.
 
 ```bash
-aircode auth status
-aircode auth import              # import an existing OpenCode credential
-aircode auth logout
+aircode-py auth status
+aircode-py auth import              # import an existing OpenCode credential
+aircode-py auth logout
 ```
 
 Tokens are stored with mode `600`:
@@ -199,25 +195,25 @@ with OpenCode.
 ## Run
 
 ```bash
-aircode                         # mode picker
-aircode tui                     # terminal
-aircode gui                     # native window
-aircode web                     # local web server
-aircode web --open              # start and open the browser
-aircode run "explain this repo" # one prompt, headless
-aircode chat                    # headless chat REPL
+aircode-py                         # mode picker
+aircode-py tui                     # terminal
+aircode-py gui                     # native window
+aircode-py web                     # local web server
+aircode-py web --open              # start and open the browser
+aircode-py run "explain this repo" # one prompt, headless
+aircode-py chat                    # headless chat REPL
 ```
 
 Useful options:
 
 ```bash
-aircode run -m deepseek-v4.1-flash-free "fix the failing test"
-aircode run --auto "format the project"   # skip tool prompts for this run
-aircode run -s <session-id> "continue"
-aircode run --cwd /path/to/project "summarise the code"
-aircode models --refresh
-aircode sessions list
-aircode sessions show <session-id>
+aircode-py run -m deepseek-v4.1-flash-free "fix the failing test"
+aircode-py run --auto "format the project"   # skip tool prompts for this run
+aircode-py run -s <session-id> "continue"
+aircode-py run --cwd /path/to/project "summarise the code"
+aircode-py models --refresh
+aircode-py sessions list
+aircode-py sessions show <session-id>
 ```
 
 `--auto` approves writes, edits and shell commands for that process. Use it only
@@ -230,7 +226,7 @@ bearer token and prints a URL. The token is in the URL fragment, so the browser
 does not send it to the server:
 
 ```bash
-aircode web --host 0.0.0.0 --port 4096
+aircode-py web --host 0.0.0.0 --port 4096
 ```
 
 Open the printed URL, or append `#token=<token>` to the local URL. Do not share
@@ -267,9 +263,9 @@ outside it ask first.
 ## Verify the install
 
 ```bash
-aircode doctor
-aircode models --refresh
-aircode run "reply with ok"
+aircode-py doctor
+aircode-py models --refresh
+aircode-py run "reply with ok"
 ```
 
 For development:
@@ -284,13 +280,13 @@ ruff check src tests
 
 ### `No terminal and no display`
 
-Run `aircode tui` in a terminal, or start `aircode web` and open the printed URL.
+Run `aircode-py tui` in a terminal, or start `aircode-py web` and open the printed URL.
 The native window needs a graphical session and PySide6.
 
 ### Qt platform plugin errors on Linux
 
 Install the Qt/X11 runtime packages listed above. If it still fails, reinstall
-PySide6 and check `aircode doctor` from the same virtual environment.
+PySide6 and check `aircode-py doctor` from the same virtual environment.
 
 ### Imports fail after a uv install
 
@@ -325,9 +321,24 @@ key provider or a local model. See the security and provider notes in
 
 ## Uninstall
 
+The installer puts the binary at `~/.local/bin/aircode-py`. Remove it with:
+
 ```bash
-python -m pip uninstall aircode-py
+curl -fsSL https://raw.githubusercontent.com/lemonys-001/aircode-py/main/uninstall.sh | sh
 ```
 
-To remove local data as well, delete the config, data and cache directories
-reported by `aircode doctor`. This deletes sessions and the stored token.
+Add `-- --purge` to also delete config, sessions, cache and the stored token:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/lemonys-001/aircode-py/main/uninstall.sh | sh -s -- --purge
+```
+
+On Windows:
+
+```powershell
+irm https://raw.githubusercontent.com/lemonys-001/aircode-py/main/uninstall.ps1 | iex
+```
+
+From a checkout, use `sh uninstall.sh` or `.\uninstall.ps1`. The scripts keep
+user data by default. If you installed with pip, also run
+`python -m pip uninstall aircode-py`.
