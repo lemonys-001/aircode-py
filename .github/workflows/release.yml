@@ -83,7 +83,7 @@ jobs:
               export DEBIAN_FRONTEND=noninteractive
               export PYTHONDONTWRITEBYTECODE=1
               apt-get update
-              apt-get install -y --no-install-recommends python3.12 python3.12-venv ca-certificates binutils
+              apt-get install -y --no-install-recommends python3.12 python3.12-venv libpython3.12 ca-certificates binutils
               python3.12 -m venv /venv
               /venv/bin/pip install --upgrade pip
               /venv/bin/pip install --no-cache-dir ".[gui]" pyinstaller
